@@ -1,0 +1,8 @@
+<div>
+    <form [formGroup]="searchForm" (ngSubmit)="search(searchForm.value)">
+        <mat-form-field>
+            <input matInput id="term" type="text" formControlName="term" placeholder="Hakusana">
+        </mat-form-field>
+        <button type="submit" mat-raised-button color="primary">Etsi</button>
+    </form>
+</div>
