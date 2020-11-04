@@ -1,8 +1,12 @@
-<div>
-    <h2 *ngIf="results.length === 0">Ei tuloksia</h2>
-    <h2 *ngIf="results.length === 1">Löytyi yksi sana</h2>
-    <h2 *ngIf="results.length > 1">Löytyi yhteensä {{results.length}} sanaa</h2>
-    <mat-list dense>
-        <mat-list-item *ngFor="let word of results">{{word}}</mat-list-item>
-    </mat-list>
-</div>
+<mat-card>
+    <mat-card-title>
+        <h2 *ngIf="results.length === 0">Ei tuloksia</h2>
+        <h2 *ngIf="results.length === 1">Löytyi yksi sana</h2>
+        <h2 *ngIf="results.length > 1">Löytyi yhteensä {{results.length}} sanaa</h2>
+    </mat-card-title>
+    <mat-card-content>
+        <mat-list dense>
+            <mat-list-item *ngFor="let word of results">{{word}}</mat-list-item>
+        </mat-list>
+    </mat-card-content>
+</mat-card>

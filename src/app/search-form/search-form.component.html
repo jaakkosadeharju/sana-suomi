@@ -1,8 +1,35 @@
 <div>
     <form [formGroup]="searchForm" (ngSubmit)="search(searchForm.value)">
-        <mat-form-field>
-            <input matInput id="term" type="text" formControlName="term" placeholder="Hakusana">
-        </mat-form-field>
-        <button type="submit" mat-raised-button color="primary">Etsi</button>
+        <mat-grid-list cols="4" rowHeight="100px">
+            <mat-grid-tile colspan="3">
+                <mat-form-field>
+                    <input matInput id="term" type="text" formControlName="term" placeholder="Hakusana">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <button type="submit" mat-raised-button color="primary">Etsi</button>
+            </mat-grid-tile>
+        </mat-grid-list>
+
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Hakuoptiot
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div>
+                <mat-checkbox formControlName="matchPart">Hae myös sanan osalla</mat-checkbox>
+            </div>
+            <mat-form-field appearance="fill">
+                <mat-label>Täsmääviä hakusanoja vähintään</mat-label>
+                <mat-select formControlName="matchingWordCount">
+                    <mat-option *ngFor="let amountOpt of termCombineAmountOptions" [value]="amountOpt.value">
+                        {{amountOpt.title}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+        </mat-expansion-panel>
     </form>
 </div>

@@ -11,26 +11,34 @@ export class SearchService {
 
   constructor() {}
 
-  private findWords(words: string[], searchTerms: string[]): string[] {
-    if (searchTerms.length === 0) {
-      console.log('Enter at least one word.');
-    }
-
-    return searchTerms.reduce((arr, term) => {
-      const re = new RegExp(`^${term}$`, 'i');
-      return arr.filter(w => w.match(re));
-    }, words);
-  }
-
-  search(searchTerms: string[]): string[] {
+  search(searchTerms: string[], minMatchingWords: number): string[] {
     let words = SanaJson['kotus-sanalista'].st.map(w => w.s[0]);
+    minMatchingWords = minMatchingWords || searchTerms.length;
+    minMatchingWords = Math.min(minMatchingWords, searchTerms.length);
 
     // Remove duplicates
     words = words.reduce(((m, e) => (m[e] = true, m)), {});
     words = Object.keys(words);
 
-    const res = this.findWords(words, searchTerms);
+    if (searchTerms.length === 0) {
+      console.log('Enter at least one word.');
+    }
 
+    const resultArr = searchTerms.map(term => {
+      const re = new RegExp(`^${term}$`, 'i');
+      return words.filter(w => w.match(re));
+    });
+
+    const counts = resultArr
+      .reduce(((all, matches) => {
+        // increase count for each word
+        matches.forEach(w => {
+          all[w] = (all[w] || 0) + 1;
+        });
+        return all;
+      }), {});
+
+    const res = Object.keys(counts).filter(w => counts[w] >= minMatchingWords);
     this.results.next(res);
 
     return res;

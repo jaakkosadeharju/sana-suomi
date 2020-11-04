@@ -10,6 +10,9 @@ import { SearchService } from '../search.service';
 })
 export class SearchFormComponent implements OnInit {
   searchTerm: string;
+  matchPart: boolean;
+  matchingWordCount: number;
+  termCombineAmountOptions: any;
   searchForm;
 
   constructor(
@@ -17,8 +20,19 @@ export class SearchFormComponent implements OnInit {
     private service: SearchService,
   ) {
     this.searchTerm = '';
+    this.matchPart = false;
+    this.termCombineAmountOptions = [
+      {value: null, title: 'Kaikki'},
+      {value: 1, title: 'Yksi'},
+      {value: 2, title: 'Kaksi'},
+      {value: 3, title: 'Kolme'},
+      {value: 4, title: 'Neljä'},
+      {value: 5, title: 'Viisi'},
+    ];
     this.searchForm = this.formBuilder.group({
-      term: this.searchTerm
+      term: this.searchTerm,
+      matchPart: this.matchPart,
+      matchingWordCount: this.matchingWordCount
     });
   }
 
@@ -30,7 +44,8 @@ export class SearchFormComponent implements OnInit {
       .replace(/[^a-zåäöA-Zåäö\.\*]/gi, ' ')
       .replace(/\*/gi, '.*')
       .split(/\s+/)
-      .map(t => `${t}`);
-    this.service.search(terms);
+      .filter(w => w !== '')
+      .map(t => value.matchPart ? `.*${t}.*` : t);
+    this.service.search(terms, value.matchingWordCount);
   }
 }
